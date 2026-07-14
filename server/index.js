@@ -4,31 +4,17 @@ import connectDB from "./config/db.js";
 import { connect } from "mongoose";
 import videoSchema from "./models/video.js";
 import mongoose from "mongoose";
+import videoRouter from "./routes/video.js";
 
 const app = express();
 const port = 3000;
-const Video = mongoose.model("Video", videoSchema);
 
 app.use(express.json());
 
+app.use("/", videoRouter);
+
 app.get("/", (req, res) => {
   res.send("Hello Worlds");
-});
-
-app.get("/videos", async (req, res) => {
-  const videos = await Video.find();
-  res.send(videos);
-});
-
-app.post("/videos", async (req, res) => {
-  const { url, title } = req.body;
-  const video = new Video({ url, title });
-  try {
-    await video.save();
-    res.send("Video successfully saved");
-  } catch (e) {
-    console.error("Could not save video", e.message);
-  }
 });
 
 async function start() {

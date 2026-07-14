@@ -1,7 +1,9 @@
 import "dotenv/config";
 import express from "express";
-import connectDB from "./db.js";
+import connectDB from "./config/db.js";
 import { connect } from "mongoose";
+import videoSchema from "./models/video.js";
+import mongoose from "mongoose";
 
 const app = express();
 const port = 3000;
@@ -22,3 +24,7 @@ async function start() {
 }
 
 start();
+
+const Video = mongoose.model("Video", videoSchema);
+const test = new Video({ url: "youtube.com", title: "sunday kensi sesh" });
+await test.save();

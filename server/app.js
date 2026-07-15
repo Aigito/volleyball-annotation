@@ -5,13 +5,14 @@ import { connect } from "mongoose";
 import videoSchema from "./models/video.js";
 import mongoose from "mongoose";
 import videoRouter from "./routes/video.js";
+import userRouter from "./routes/user.js";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.use("/", videoRouter);
+app.use("/", videoRouter, userRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello Worlds");

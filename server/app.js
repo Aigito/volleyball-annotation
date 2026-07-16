@@ -26,7 +26,7 @@ async function start() {
       console.log(`Listening on port ${3000}`);
     });
   } catch (e) {
-    res.status(500).send(err.message);
+    res.status(500).send(e.message);
     console.error("Something went wrong", e.message);
   }
 }

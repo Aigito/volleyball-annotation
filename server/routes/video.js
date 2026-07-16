@@ -24,7 +24,7 @@ videoRouter.post("/videos", async (req, res) => {
     await video.save();
     res.send("Video successfully saved");
   } catch (e) {
-    res.status(500).send(err.message);
+    res.status(500).send(e.message);
     console.error("Could not save video", e.message);
   }
 });

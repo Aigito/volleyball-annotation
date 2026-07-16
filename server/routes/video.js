@@ -1,8 +1,10 @@
 import express from "express";
-import videoSchema from "../models/video.js";
 import mongoose from "mongoose";
+import videoSchema from "../models/video.js";
+import userSchema from "../models/user.js";
 const videoRouter = express.Router();
 const Video = mongoose.model("Video", videoSchema);
+const User = mongoose.model("User", userSchema);
 
 videoRouter.get("/videos", async (req, res) => {
   const videos = await Video.find();
@@ -11,7 +13,8 @@ videoRouter.get("/videos", async (req, res) => {
 
 videoRouter.post("/videos", async (req, res) => {
   const { url, title } = req.body;
-  const video = new Video({ url, title });
+  const user = await User.findOne();
+  const video = new Video({ user, url, title });
   try {
     await video.save();
     res.send("Video successfully saved");

@@ -4,19 +4,20 @@ import userSchema from "../models/user.js";
 const authRouter = express.Router();
 const User = new mongoose.model("User", userSchema);
 
-// Todo: Requires email / login name and password as well
-// Todo: Encrypt password
+// Todo: Encrypt password upon signup
+// Todo: Implement signup route
+
 // Todo: Somehow ensure that req.body always includes an email and password? Form validation?
 
 authRouter.post("/login", async (req, res) => {
   try {
-    const { name } = req.body;
+    const { email, password } = req.body;
 
-    if (!name) throw new Error("Name is required");
+    if (!email || !password) throw new Error("Email and password is required");
 
-    const user = await User.findOne({ name });
+    const user = await User.findOne({ email, password });
 
-    if (!user) res.send("No user found");
+    if (!user) res.send("Incorrect email or password");
 
     res.send(user);
   } catch (e) {
@@ -25,7 +26,7 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-// Todo: Implement actual log out functionality
+// Todo: Implement actual log out functionality by deleting cookie / session
 
 authRouter.post("/logout", (req, res) => {
   res.send("Logged out");

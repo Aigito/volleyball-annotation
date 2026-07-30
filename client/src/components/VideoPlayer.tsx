@@ -6,17 +6,23 @@ export default function VideoPlayer() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const onTimeUpdate = () => {
     const nextTime = videoRef?.current?.currentTime ?? 0;
-    const minute = Math.floor(nextTime / 60);
-    const second = Math.floor(nextTime) % 60;
+    const [minute, second] = formatMinuteAndSecond(nextTime);
 
     setCurrentTime({ minute, second });
   };
 
   const onLoadedMetaData = () => {
     const duration = videoRef?.current?.duration ?? 0;
-    const minute = Math.floor(duration / 60);
-    const second = Math.floor(duration) % 60;
+    const [minute, second] = formatMinuteAndSecond(duration);
+
     setVideoDuration({ minute, second });
+  };
+
+  const formatMinuteAndSecond = (totalDuration: number): [number, number] => {
+    const minute = Math.floor(totalDuration / 60);
+    const second = Math.floor(totalDuration) % 60;
+
+    return [minute, second];
   };
 
   return (

@@ -25,6 +25,26 @@ export default function VideoPlayer() {
     return [minute, second];
   };
 
+  const handlePlayback = async () => {
+    const videoElement = videoRef.current;
+
+    if (!videoElement) return;
+
+    if (videoElement.paused) {
+      try {
+        await videoElement.play();
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error("Unable to play video", err.message);
+        } else {
+          console.error("Unknown error");
+        }
+      }
+    } else {
+      videoElement.pause();
+    }
+  };
+
   return (
     <div>
       <video
@@ -42,6 +62,7 @@ export default function VideoPlayer() {
         {`${currentTime.minute}:${String(currentTime.second).padStart(2, "0")}`} /{" "}
         {`${videoDuration.minute}:${String(videoDuration.second).padStart(2, "0")}`}
       </p>
+      <button onClick={handlePlayback}>Play/Pause</button>
     </div>
   );
 }

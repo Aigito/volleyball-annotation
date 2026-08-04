@@ -1,7 +1,13 @@
+import CourtDiagram from "./components/CourtDiagram";
 import VideoPlayer from "./components/VideoPlayer";
 
 function App() {
-  return <VideoPlayer />;
+  return (
+    <>
+      <VideoPlayer />
+      <CourtDiagram />
+    </>
+  );
 }
 
 export default App;

@@ -38,8 +38,6 @@ export default function CourtDiagram() {
         ctx.lineTo(currX, currY);
         ctx.stroke();
         ctx.closePath();
-
-        // TODO: Change this to actually drawing a line
       } else {
         currentPointRef.current = getCanvasPoint(e);
       }
@@ -53,16 +51,20 @@ export default function CourtDiagram() {
       drawModeRef.current = false;
     };
 
-    // TODO: To implement setting draw mode to false when mouse leaves canvas
+    const handleMouseLeave = () => {
+      drawModeRef.current = false;
+    };
 
+    canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mouseup", handleMouseUp);
-    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 

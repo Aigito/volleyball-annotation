@@ -3,21 +3,15 @@ import drawStaticCourt from "../canvasHelpers/drawStaticCourt";
 
 export default function CourtDiagram() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const nextPointRef = useRef<{ x: number; y: number } | null>(null);
+  const currentPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const drawModeRef = useRef(false);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext("2d");
-
-    if (!ctx) return;
-
-    drawStaticCourt(ctx);
-  }, []);
-
-  useEffect(() => {
     const canvas = canvasRef.current;
-
     if (!canvas) return;
+
+    const ctx = canvas.getContext("2d")!;
+    drawStaticCourt(ctx);
 
     const getCanvasPoint = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -31,11 +25,23 @@ export default function CourtDiagram() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (drawModeRef.current) {
-        nextPointRef.current = getCanvasPoint(e);
+      const drawMode = drawModeRef.current;
+
+      if (drawMode) {
+        const { x: prevX, y: prevY } = currentPointRef.current;
+        const { x: currX, y: currY } = getCanvasPoint(e);
+        currentPointRef.current = { x: currX, y: currY };
+
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        ctx.stroke();
+        ctx.closePath();
 
         // TODO: Change this to actually drawing a line
-        console.log(nextPointRef.current);
+      } else {
+        currentPointRef.current = getCanvasPoint(e);
       }
     };
 

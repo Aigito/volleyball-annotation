@@ -27,8 +27,7 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
   const drawModeRef = useRef(false);
 
   const reRenderPreviousStrokes = (ctx: CanvasRenderingContext2D) => {
-    // Example re-rendering of previously stored strokes
-    // TODO: Read from `strokes` state, forEach do a stroke for each coordinate
+    // TODO: Re-rendering from hardcoded coors, now need to re-render from saved DB (can't do it from ref as ref gets re-initialized upon refreshing page)
 
     strokesRef.current.forEach((group) => {
       const initialPoint = group[0];
@@ -57,9 +56,14 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
       const drawMode = drawModeRef.current;
 
       if (drawMode) {
-        // TODO: store current {x,y} to last element of strokes (remember to spread otherwise React will not re-render)
+        const strokes = strokesRef.current;
+        const latestStrokeGroup = strokes[strokes.length - 1];
         const { x: prevX, y: prevY } = currentPointRef.current;
         const { x: currX, y: currY } = getCanvasPoint(canvas, e);
+
+        // push coordinates into latest stroke grou[]
+        latestStrokeGroup.push({ x: currX, y: currY });
+
         currentPointRef.current = { x: currX, y: currY };
 
         ctx.beginPath();
@@ -74,6 +78,8 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
     };
 
     const handleMouseDown = () => {
+      // start a new stroke group
+      strokesRef.current.push([]);
       drawModeRef.current = true;
     };
 

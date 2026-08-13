@@ -4,8 +4,12 @@ import useCanvasDrawing from "../hooks/useCanvasDrawing";
 
 export default function CourtDiagram() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const handleSaveAnnotation = () => {
-    axios.get("http://localhost:3000/");
+  const handleSaveAnnotation = async () => {
+    // TODO: To call a post route instead
+    // TODO: Need to grab all other relevant info: videoId, timestamp, annotation strokes
+    const res = await axios.get("http://localhost:3000/annotations");
+
+    console.log(res);
   };
 
   useCanvasDrawing(canvasRef);

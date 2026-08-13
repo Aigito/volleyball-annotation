@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import connectDB from "./config/db.js";
 import { connect } from "mongoose";
 import videoSchema from "./models/video.js";
@@ -11,9 +12,13 @@ import annotationRouter from "./routes/annotation.js";
 
 const app = express();
 const port = 3000;
+const corsOptions = {
+  origin: "http://localhost:5173",
+};
 
 app.use(express.json());
 
+app.use(cors(corsOptions));
 app.use("/", videoRouter, userRouter, authRouter, annotationRouter);
 
 app.get("/", (req, res) => {

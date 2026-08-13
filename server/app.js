@@ -7,13 +7,14 @@ import mongoose from "mongoose";
 import videoRouter from "./routes/video.js";
 import userRouter from "./routes/user.js";
 import authRouter from "./routes/auth.js";
+import annotationRouter from "./routes/annotation.js";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.use("/", videoRouter, userRouter, authRouter);
+app.use("/", videoRouter, userRouter, authRouter, annotationRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello Worlds");
@@ -26,7 +27,6 @@ async function start() {
       console.log(`Listening on port ${3000}`);
     });
   } catch (e) {
-    res.status(500).send(e.message);
     console.error("Something went wrong", e.message);
   }
 }

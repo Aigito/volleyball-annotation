@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import drawStaticCourt from "../canvasHelpers/drawStaticCourt";
 import getCanvasPoint from "../canvasHelpers/getCanvasPoint";
+import reRenderPreviousStrokes from "../canvasHelpers/reRenderPreviousStrokes";
 
 export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement | null>) {
   const startingCoors = [
@@ -26,31 +27,13 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
   const currentPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const drawModeRef = useRef(false);
 
-  const reRenderPreviousStrokes = (ctx: CanvasRenderingContext2D) => {
-    // TODO: Re-rendering from hardcoded coors, now need to re-render from saved DB (can't do it from ref as ref gets re-initialized upon refreshing page)
-
-    strokesRef.current.forEach((group) => {
-      const initialPoint = group[0];
-      ctx.strokeStyle = "blue";
-      ctx.beginPath();
-      ctx.moveTo(initialPoint.x, initialPoint.y);
-
-      for (let i = 1; i < group.length; i++) {
-        const { x, y } = group[i];
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      ctx.closePath();
-    });
-  };
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d")!;
     drawStaticCourt(ctx);
-    reRenderPreviousStrokes(ctx);
+    reRenderPreviousStrokes(strokesRef, ctx);
 
     const handleMouseMove = (e: MouseEvent) => {
       const drawMode = drawModeRef.current;
@@ -61,7 +44,7 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
         const { x: prevX, y: prevY } = currentPointRef.current;
         const { x: currX, y: currY } = getCanvasPoint(canvas, e);
 
-        // push coordinates into latest stroke grou[]
+        // push coordinates into latest stroke group[]
         latestStrokeGroup.push({ x: currX, y: currY });
 
         currentPointRef.current = { x: currX, y: currY };
@@ -79,6 +62,7 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
 
     const handleMouseDown = () => {
       // start a new stroke group
+      // TODO: instead of saving it to a ref, it should be saved to the DB, under annotation?
       strokesRef.current.push([]);
       drawModeRef.current = true;
     };

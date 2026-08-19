@@ -87,6 +87,5 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
     };
   }, [canvasRef]);
 
-  // TODO: Find a way to fix this error
-  return strokesRef.current;
+  return strokesRef;
 }

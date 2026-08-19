@@ -16,7 +16,7 @@ export default function CourtDiagram({ timestamp }: CourtDiagramProp) {
     });
   };
 
-  const strokes = useCanvasDrawing(canvasRef);
+  const strokes = useCanvasDrawing(canvasRef).current;
 
   return (
     <div>

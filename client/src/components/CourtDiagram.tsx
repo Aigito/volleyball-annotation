@@ -2,21 +2,16 @@ import axios from "axios";
 import { useRef } from "react";
 import useCanvasDrawing from "../hooks/useCanvasDrawing";
 
-type Time = {
-  minute: number;
-  second: number;
-};
-
 type CourtDiagramProp = {
-  currentTime: Time;
+  timestamp: number;
 };
 
-export default function CourtDiagram({ currentTime }: CourtDiagramProp) {
+export default function CourtDiagram({ timestamp }: CourtDiagramProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const handleSaveAnnotation = async () => {
     await axios.post("http://localhost:3000/annotations", {
-      // TODO: Gran videoID from params
-      timestamp: currentTime,
+      // TODO: Grab videoID from params
+      timestamp,
       canvasDrawing: strokes,
     });
   };

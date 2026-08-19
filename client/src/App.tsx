@@ -4,12 +4,12 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-  const [currentTime, setCurrentTime] = useState({ minute: 0, second: 0 });
+  const [timestamp, setTimestamp] = useState(0);
 
   return (
     <div className="container">
-      <VideoPlayer currentTime={currentTime} setCurrentTime={setCurrentTime} />
-      <CourtDiagram currentTime={currentTime} />
+      <VideoPlayer setTimestamp={setTimestamp} />
+      <CourtDiagram timestamp={timestamp} />
     </div>
   );
 }

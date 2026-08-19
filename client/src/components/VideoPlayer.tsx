@@ -1,7 +1,18 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type Dispatch, type SetStateAction } from "react";
 
-export default function VideoPlayer() {
-  const [currentTime, setCurrentTime] = useState({ minute: 0, second: 0 });
+type Time = {
+  minute: number;
+  second: number;
+};
+
+type VideoPlayerProp = {
+  currentTime: Time;
+  setCurrentTime: Dispatch<SetStateAction<{ minute: number; second: number }>>;
+};
+
+// TODO: Change so that timestamp is always a number, and is only formatted for UI purposes
+
+export default function VideoPlayer({ currentTime, setCurrentTime }: VideoPlayerProp) {
   const [videoDuration, setVideoDuration] = useState({ minute: 0, second: 0 });
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const onTimeUpdate = () => {

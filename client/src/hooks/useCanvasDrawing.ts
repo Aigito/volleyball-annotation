@@ -62,7 +62,6 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
 
     const handleMouseDown = () => {
       // start a new stroke group
-      // TODO: instead of saving it to a ref, it should be saved to the DB, under annotation?
       strokesRef.current.push([]);
       drawModeRef.current = true;
     };
@@ -87,4 +86,7 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [canvasRef]);
+
+  // TODO: Find a way to fix this error
+  return strokesRef.current;
 }

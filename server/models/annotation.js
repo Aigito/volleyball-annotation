@@ -5,9 +5,9 @@ const Video = mongoose.model("Video", videoSchema);
 
 const annotationSchema = new Schema({
   videoId: { type: mongoose.ObjectId, ref: Video },
-  timestamp: Date,
+  timestamp: mongoose.Mixed, // TODO: Save as a number, to be fixed
   comment: String,
-  canvasDrawing: Mixed,
+  canvasDrawing: mongoose.Mixed,
 });
 
 export default annotationSchema;

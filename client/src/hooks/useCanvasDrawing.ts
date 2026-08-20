@@ -4,26 +4,9 @@ import getCanvasPoint from "../canvasHelpers/getCanvasPoint";
 import reRenderPreviousStrokes from "../canvasHelpers/reRenderPreviousStrokes";
 
 export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement | null>) {
-  const startingCoors = [
-    {
-      x: 50,
-      y: 50,
-    },
-    {
-      x: 50,
-      y: 100,
-    },
-    {
-      x: 6,
-      y: 8,
-    },
-    {
-      x: 6,
-      y: 150,
-    },
-  ];
+  type Stroke = { x: number; y: number }[];
 
-  const strokesRef = useRef([startingCoors]);
+  const strokesRef = useRef<Stroke[]>([]);
   const currentPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const drawModeRef = useRef(false);
 

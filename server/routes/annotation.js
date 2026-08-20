@@ -9,11 +9,17 @@ annotationRouter.get("/annotations", (req, res) => {
 });
 
 annotationRouter.post("/annotations", async (req, res) => {
-  const { timestamp, canvasDrawing } = req.body;
+  try {
+    const { timestamp, canvasDrawing } = req.body;
 
-  const annotation = new Annotation({ timestamp, canvasDrawing });
+    const annotation = new Annotation({ timestamp, canvasDrawing });
 
-  await annotation.save();
+    await annotation.save();
+    res.status(201).json({ message: "Annotation saved", annotation });
+  } catch (error) {
+    console.error("Error saving annotation: ", error.message);
+    res.status(500).json({ mesasge: "Failed to save annotation" });
+  }
 });
 
 export default annotationRouter;

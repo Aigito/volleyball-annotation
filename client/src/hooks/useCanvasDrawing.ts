@@ -1,21 +1,36 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import drawStaticCourt from "../canvasHelpers/drawStaticCourt";
 import getCanvasPoint from "../canvasHelpers/getCanvasPoint";
 import reRenderPreviousStrokes from "../canvasHelpers/reRenderPreviousStrokes";
+import type { Stroke } from "../types/annotation";
 
-export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement | null>) {
-  type Stroke = { x: number; y: number }[];
-
-  const strokesRef = useRef<Stroke[]>([]);
+export default function useCanvasDrawing(
+  canvasRef: RefObject<HTMLCanvasElement | null>,
+  strokesRef: RefObject<Stroke[]>,
+) {
   const currentPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const drawModeRef = useRef(false);
 
+  const resetCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+
+    if (!canvas || !ctx) return;
+
+    strokesRef.current = [];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStaticCourt(ctx);
+  }, [canvasRef, strokesRef]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const ctx = canvas?.getContext("2d");
 
-    const ctx = canvas.getContext("2d")!;
+    if (!canvas || !ctx) return;
+
     drawStaticCourt(ctx);
+
+    // TODO: Move reRenderPreviousStrokes in future to when we can navigate to specific timestamp
     reRenderPreviousStrokes(strokesRef, ctx);
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -68,7 +83,7 @@ export default function useCanvasDrawing(canvasRef: RefObject<HTMLCanvasElement 
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [canvasRef]);
+  }, [canvasRef, strokesRef]);
 
-  return strokesRef;
+  return { resetCanvas };
 }

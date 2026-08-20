@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRef } from "react";
 import useCanvasDrawing from "../hooks/useCanvasDrawing";
+import type { Stroke } from "../types/annotation";
 
 type CourtDiagramProp = {
   timestamp: number;
@@ -8,15 +9,19 @@ type CourtDiagramProp = {
 
 export default function CourtDiagram({ timestamp }: CourtDiagramProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const strokesRef = useRef<Stroke[]>([]);
+
+  const { resetCanvas } = useCanvasDrawing(canvasRef, strokesRef);
+
   const handleSaveAnnotation = async () => {
     await axios.post("http://localhost:3000/annotations", {
       // TODO: Grab videoID from params
       timestamp,
-      canvasDrawing: strokes,
+      canvasDrawing: strokesRef.current,
     });
-  };
 
-  const strokes = useCanvasDrawing(canvasRef).current;
+    resetCanvas();
+  };
 
   return (
     <div>

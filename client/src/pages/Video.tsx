@@ -1,9 +1,9 @@
-import CourtDiagram from "./components/CourtDiagram";
-import VideoPlayer from "./components/VideoPlayer";
-import "./App.css";
+import "../styles/Video.css";
 import { useState } from "react";
+import VideoPlayer from "../components/VideoPlayer";
+import CourtDiagram from "../components/CourtDiagram";
 
-function App() {
+function Video() {
   const [timestamp, setTimestamp] = useState(0);
 
   return (
@@ -14,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+export default Video;

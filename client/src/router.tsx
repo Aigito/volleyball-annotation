@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Video from "./pages/Video";
 import Settings from "./pages/Settings";
 import VideosList from "./pages/VideosList";
+import { createAnnotation } from "./api/annotations";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
           {
             path: ":videoId",
             element: <Video />,
+            action: async ({ request }) => {
+              const { timestamp, canvasDrawing } = await request.json();
+              await createAnnotation({ timestamp, canvasDrawing }, { signal: request.signal });
+            },
           },
         ],
       },

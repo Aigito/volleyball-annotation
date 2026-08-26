@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import useCanvasDrawing from "../hooks/useCanvasDrawing";
 import type { Stroke } from "../types/annotation";
-import { createAnnotation } from "../api/annotations";
+import { useParams, useSubmit } from "react-router";
 
 type CourtDiagramProp = {
   timestamp: number;
@@ -10,16 +10,18 @@ type CourtDiagramProp = {
 export default function CourtDiagram({ timestamp }: CourtDiagramProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const strokesRef = useRef<Stroke[]>([]);
-  const controller = new AbortController();
+  const submit = useSubmit();
+  const params = useParams();
 
   const { resetCanvas } = useCanvasDrawing(canvasRef, strokesRef);
 
   const handleSaveAnnotation = async () => {
-    await createAnnotation(
+    const videoId = params.videoId;
+
+    submit(
       { timestamp, canvasDrawing: strokesRef.current },
-      { signal: controller.signal },
+      { action: `/videos/${videoId}`, method: "post", encType: "application/json" },
     );
-    // TODO: Grab videoID from params
 
     resetCanvas();
   };

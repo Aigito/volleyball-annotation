@@ -1,2 +1,3 @@
 export type Stroke = { x: number; y: number }[];
-export type Annotation = { timestamp: number; canvasDrawing: Stroke[] };
+export type AnnotationInput = { timestamp: number; canvasDrawing: Stroke[] };
+export type Annotation = AnnotationInput & { _id: string };

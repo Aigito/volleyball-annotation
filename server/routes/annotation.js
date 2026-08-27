@@ -4,8 +4,9 @@ import annotationSchema from "../models/annotation.js";
 const annotationRouter = express.Router();
 const Annotation = mongoose.model("Annotation", annotationSchema);
 
-annotationRouter.get("/annotations", (req, res) => {
-  res.send("Annotation saved");
+annotationRouter.get("/annotations", async (req, res) => {
+  const annotations = await Annotation.find();
+  res.send(annotations);
 });
 
 annotationRouter.post("/annotations", async (req, res) => {

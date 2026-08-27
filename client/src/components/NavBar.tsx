@@ -10,6 +10,9 @@ export default function NavBar() {
             <Link to="/videos">My Videos</Link>
           </li>
           <li>
+            <Link to="/annotations">My Annotations</Link>
+          </li>
+          <li>
             <Link to="/settings">Settings</Link>
           </li>
         </ul>

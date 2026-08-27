@@ -3,8 +3,9 @@ import Home from "./pages/Home";
 import Video from "./pages/Video";
 import Settings from "./pages/Settings";
 import VideosList from "./pages/VideosList";
-import { createAnnotation } from "./api/annotations";
+import { createAnnotation, getAnnotations } from "./api/annotations";
 import { getVideos } from "./api/videos";
+import AnnotationsList from "./pages/AnnotationsList";
 
 export const routes = createBrowserRouter([
   {
@@ -29,6 +30,20 @@ export const routes = createBrowserRouter([
             action: async ({ request }) => {
               const { timestamp, canvasDrawing } = await request.json();
               await createAnnotation({ timestamp, canvasDrawing }, { signal: request.signal });
+            },
+          },
+        ],
+      },
+      {
+        path: "annotations",
+        children: [
+          {
+            index: true,
+            element: <AnnotationsList />,
+            loader: async ({ request: { signal } }) => {
+              const annotations = await getAnnotations({ signal });
+
+              return annotations.data;
             },
           },
         ],

@@ -5,7 +5,7 @@ import Settings from "./pages/Settings";
 import VideosList from "./pages/VideosList";
 import { createAnnotation } from "./api/annotations";
 
-export const router = createBrowserRouter([
+export const routes = createBrowserRouter([
   {
     path: "/",
     element: <Home />,

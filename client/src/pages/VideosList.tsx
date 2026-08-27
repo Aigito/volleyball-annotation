@@ -1,3 +1,3 @@
 export default function VideosList() {
-  return "List of videos";
+  return <div>"List of videos"</div>;
 }

@@ -4,6 +4,7 @@ import Video from "./pages/Video";
 import Settings from "./pages/Settings";
 import VideosList from "./pages/VideosList";
 import { createAnnotation } from "./api/annotations";
+import { getVideos } from "./api/videos";
 
 export const routes = createBrowserRouter([
   {
@@ -14,7 +15,14 @@ export const routes = createBrowserRouter([
       {
         path: "videos",
         children: [
-          { index: true, element: <VideosList /> },
+          {
+            index: true,
+            element: <VideosList />,
+            loader: async ({ request: { signal } }) => {
+              const videos = await getVideos({ signal });
+              return videos.data;
+            },
+          },
           {
             path: ":videoId",
             element: <Video />,

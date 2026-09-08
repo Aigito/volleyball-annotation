@@ -6,6 +6,7 @@ export default function VideosList() {
 
   return (
     <div>
+      <Link to="new">New Video</Link>
       <ul>
         {videos.map(({ _id, url }: Video) => {
           return (

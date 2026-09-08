@@ -6,6 +6,7 @@ import VideosList from "./pages/VideosList";
 import { createAnnotation, getAnnotations } from "./api/annotations";
 import { getVideos } from "./api/videos";
 import AnnotationsList from "./pages/AnnotationsList";
+import { NewVideo, NewVideoAction } from "./pages/NewVideo";
 
 export const routes = createBrowserRouter([
   {
@@ -23,6 +24,11 @@ export const routes = createBrowserRouter([
               const videos = await getVideos({ signal });
               return videos.data;
             },
+          },
+          {
+            path: "new",
+            element: <NewVideo />,
+            action: NewVideoAction,
           },
           {
             path: ":videoId",

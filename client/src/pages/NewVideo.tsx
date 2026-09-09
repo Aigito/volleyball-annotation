@@ -1,5 +1,6 @@
 import { useState, type SubmitEvent } from "react";
-import { Form } from "react-router";
+import { Form, redirect } from "react-router";
+import { createVideo } from "../api/videos";
 
 const YOUTUBE_URL_RE =
   /^(https?:\/\/)?(www\.|m\.)?(youtube\.com\/(watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
@@ -49,8 +50,15 @@ export function NewVideo() {
 
 export async function NewVideoAction({ request }: { request: Request }) {
   const formData = await request.formData();
-  const url = formData.get("url");
-  const title = formData.get("title");
+  const signal = request.signal;
+  const url = String(formData.get("url") ?? "");
+  const title = String(formData.get("title") ?? "");
 
-  console.log(url, title);
+  try {
+    await createVideo({ url, title }, { signal });
+  } catch (err) {
+    console.error(err.message);
+  }
+
+  return redirect("/videos");
 }

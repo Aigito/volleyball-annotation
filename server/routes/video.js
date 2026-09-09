@@ -13,11 +13,9 @@ videoRouter.get("/videos", async (req, res) => {
   res.send(videos);
 });
 
-// Todo: Grab the correct user that is currently logged in
-
 videoRouter.post("/videos", async (req, res) => {
   const { url, title } = req.body;
-  const user = await User.findOne();
+  const user = await User.findOne(); // Todo: Grab the correct user that is currently logged in`
   const video = new Video({ user, url, title });
   try {
     await video.save();
